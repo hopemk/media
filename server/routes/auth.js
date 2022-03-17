@@ -5,56 +5,43 @@ const {getUserById, getUserByEmail} = require('../database/service/userService')
 const { hashPassword } = require('../auth/utils')
 //const {getUserbyId, getUserByEmail} = require('../database/service/userService')
 //const {} to } = require('await-to-js')
-router.get('/', (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.json(posts)
-    })
-})
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body
+      const user = await getUserByEmail(email)
     
-    const {userId, title, description, image} = req.body;
-    console.log(userId)
-    let author = await getUserById(userId);
-    console.log(author)
-    let post = new Post({
-        author,
-        title,
-        description,
-        image 
-    })/*
-    user.save((err, result) => {
-        if (err){
-            return res.status(500).json({ success: false, data: err })
-        }
-        else{
-          console.log(result)
-        }
-
-    })*/
-    post.save().then(result => {
-    res
-    .status(200)
-    /*.cookie('jwt', token, {
-      httpOnly: true
-    })*/
-    .json({
-      success: true,
-      data: result
-    })
-    }).catch(err => {
-        return res
-    .status(500)
-    /*.cookie('jwt', token, {
-      httpOnly: true
-    })*/
-    .json({
-      success: false,
-      data: err
-    })
-    })
-    
-})
-
+    const authenticationError = () => {
+      return res
+        .status(500)
+        .json({ success: false, data: "Authentication error!" })
+    }
+    if(!(user)){
+        return authenticationError()
+    }
+    if (!(await verifyPassword(password, user.password))) {
+      console.error('Passwords do not match')
+      return authenticationError()
+    }
+  
+    const [loginErr, token] = await login(req, user)
+  
+    if (loginErr) {
+      console.error('Log in error', loginErr)
+      return authenticationError()
+    }
+    console.log("toekn")
+    console.log(token)
+  
+    return res
+      .status(200)
+      .cookie('jwt', token, {
+        httpOnly: false
+      })
+      .json({
+        success: true,
+        data: token
+      })   
+      })
+  
 router.use('/:id', (req, res, next) => {
     console.log(req.params.id)
     Post.findById(req.params.id, (err, photo) => {
