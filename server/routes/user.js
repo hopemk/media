@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../database/models/UserModel')
+const {UserModel} = require('../database/models/UserModel')
 const {getUserbyId, getUserByEmail} = require('../database/service/userService')
 const { hashPassword } = require('../auth/utils')
 //const {} to } = require('await-to-js')
@@ -25,10 +25,13 @@ router.post('/', async (req, res) => {
       let emailTaken = await getUserByEmail(email)
    
     if (emailTaken){
-        
+      return res.status(500).json({
+        success: false,
+        data: 'There is an account with that email.'
+      })
     }
    
-    let user = new User({
+    let user = new UserModel({
         email,
         firstName,
         lastName,
@@ -54,7 +57,7 @@ router.post('/', async (req, res) => {
       data: result
     })
     }).catch(err => {
-        return res
+     res
     .status(500)
     /*.cookie('jwt', token, {
       httpOnly: true

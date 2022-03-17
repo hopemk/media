@@ -16,6 +16,7 @@ nextApp.prepare().then(() => {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use('/api/photos', require('./routes/index')) 
     app.use('/api/user', require('./routes/user')) 
+    app.use('/api/post', require('./routes/post')) 
     app.get('*', (req,res) => {
         return handle(req,res) // for all the react stuff
     })

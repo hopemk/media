@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const schema = mongoose.Schema
-const user = require('./UserModel')
+const {UserSchema} = require('./UserModel')
 const PostModel = new schema({
-    author: [user],
+    author: {type : UserSchema},
     title: String,
     context: String,
     image:String,

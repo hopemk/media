@@ -1,7 +1,7 @@
-const UserModel = require('../models/UserModel') 
-
+const {UserModel} = require('../models/UserModel') 
+const { Types } = require("mongoose");
 async function getUserById(id) {
-  return await UserModel.findById(id).exec()
+  return await UserModel.findById(Types.ObjectId(id)).exec()
 }
 
 async function getUserByEmail(email) {
