@@ -3,13 +3,14 @@ const router = express.Router()
 const {UserModel} = require('../database/models/UserModel')
 const {getUserbyId, getUserByEmail} = require('../database/service/userService')
 const { hashPassword } = require('../auth/utils')
+const upload = require('../media/upload')
 //const {} to } = require('await-to-js')
 router.get('/', (req, res) => {
     User.find({}, (err, users) => {
         res.json(users)
     })
 })
-router.post('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
     let body;
     const {email, firstName, lastName, password} = req.body;
     if (!/\b\w+\@\w+\.\w+(?:\.\w+)?\b/.test(email)) {
