@@ -12,7 +12,7 @@ const { hashPassword } = require('../auth/utils')
 // ...
 
 router.post(
-  '/login',
+  '/',
   async (req, res, next) => {
     passport.authenticate(
       'login',

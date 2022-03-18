@@ -4,15 +4,18 @@ const {UserModel} = require('../database/models/UserModel')
 const {getUserbyId, getUserByEmail} = require('../database/service/userService')
 const { hashPassword } = require('../auth/utils')
 const upload = require('../media/upload')
+var fs = require('fs');
+var path = require('path');
 //const {} to } = require('await-to-js')
 router.get('/', (req, res) => {
-    User.find({}, (err, users) => {
+    UserModel.find({}, (err, users) => {
         res.json(users)
     })
 })
 router.post('/', upload.single('image'), async (req, res) => {
-    let body;
+    //let body;
     const {email, firstName, lastName, password} = req.body;
+    console.log(req.body)
     if (!/\b\w+\@\w+\.\w+(?:\.\w+)?\b/.test(email)) {
         return res.status(500).json({ success: false, data: 'Enter a valid email address.' })
       } else if (password.length < 5 || password.length > 20) {
@@ -36,7 +39,11 @@ router.post('/', upload.single('image'), async (req, res) => {
         email,
         firstName,
         lastName,
-        password :await hashPassword(password)
+        password :await hashPassword(password),
+        image:{
+          data: fs.readFileSync(path.join('uploads/' + req.file.filename)),
+          contentType: 'image/png'
+      }
     })/*
     user.save((err, result) => {
         if (err){
@@ -73,7 +80,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
 router.use('/:id', (req, res, next) => {
     console.log(req.params.id)
-    User.findById(req.params.id, (err, photo) => {
+    UserModel.findById(req.params.id, (err, photo) => {
         if(err)
             res.status(500).send(err)
         else 
