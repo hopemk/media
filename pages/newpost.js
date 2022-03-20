@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
+//import TextArea from '@material-ui/core/TextArea'
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button'
 
@@ -44,28 +45,26 @@ const useStyles = makeStyles(theme => ({
 const Register = () => {
   const classes = useStyles({})
   const [formData, setFormData] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    title: '',
+    description: '',
     image:''
   })
   const [submitting, setSubmitting] = React.useState(false)
     const handleSubmit = async e => {
         e.preventDefault()
         console.log(formData)
-        const { firstName, lastName, email, password, image } = formData
+        const { title, description,  image } = formData
         let fd = new FormData();
-        fd.append('firstname', firstName);
-        fd.append('lastName', lastName);
-        fd.append('email', email);
-        fd.append('password', password);
+        fd.append('title', title);
+        fd.append('description', description);
+        //fd.append('email', email);
+        //fd.append('password', password);
         fd.append('image', image, image.name)
-        const response = await axios.post('/api/user', 
+        const response = await axios.post('/api/post', 
           fd
         ).then(res=>{
           console.log(res)
-          window.location.replace('/login')
+          //window.location.replace('/login')
         }).catch(err => {
           console.log(err)
         })
@@ -95,48 +94,26 @@ const Register = () => {
             margin="none"
             required
             fullWidth
-            id="firstName"
-            label="First Name"
-            name="firstName"
-            autoComplete="fname"
+            id="title"
+            label="Title"
+            name="title"
+            autoComplete="title"
             autoFocus
-            defaultValue={formData.firstName}
-            onChange={e => setFormData({ ...formData, firstName: e.target.value })}
+            defaultValue={formData.title}
+            onChange={e => setFormData({ ...formData, title: e.target.value })}
           />
           <TextField
             margin="none"
             required
             fullWidth
-            id="lastName"
-            label="Last Name"
-            name="lastName"
-            autoComplete="lname"
-            defaultValue={formData.lastName}
-            onChange={e => setFormData({ ...formData, lastName: e.target.value })}
+            id="description"
+            label="description"
+            name="description"
+            autoComplete="description"
+            defaultValue={formData.description}
+            onChange={e => setFormData({ ...formData, description: e.target.value })}
           />
-          <TextField
-            margin="none"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            defaultValue={formData.email}
-            onChange={e => setFormData({ ...formData, email: e.target.value })}
-          />
-          <TextField
-            margin="none"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-            defaultValue={formData.password}
-            onChange={e => setFormData({ ...formData, password: e.target.value })}
-          />
+          
           <Input
             margin="none"
             required

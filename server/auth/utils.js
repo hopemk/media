@@ -21,6 +21,10 @@ const { UserModel } = require ('../database/models/UserModel')
       expiresIn: 604800
     })
   }
+  const verifyToken = (req) => {
+    const token = req.headers.cookie.split(' ')[2].split('=')[1];
+    return jwt.verify(token, 'TOP_SECRET');
+  }
   const hashPassword = async password => {
     if (!password) {
       throw new Error('Password was not provided')
@@ -44,4 +48,4 @@ const { UserModel } = require ('../database/models/UserModel')
   
     return next()
   }
-  module.exports= { setup, signToken, hashPassword, verifyPassword, checkIsInRole }
+  module.exports= { setup, signToken, verifyToken, hashPassword, verifyPassword, checkIsInRole }

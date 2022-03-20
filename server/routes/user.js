@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 router.post('/', upload.single('image'), async (req, res) => {
     //let body;
     const {email, firstName, lastName, password} = req.body;
-    console.log(req.body)
+    console.log(req.file.filename)
     if (!/\b\w+\@\w+\.\w+(?:\.\w+)?\b/.test(email)) {
         return res.status(500).json({ success: false, data: 'Enter a valid email address.' })
       } else if (password.length < 5 || password.length > 20) {
@@ -40,10 +40,11 @@ router.post('/', upload.single('image'), async (req, res) => {
         firstName,
         lastName,
         password :await hashPassword(password),
-        image:{
+        image:req.file.filename
+        /*image:{
           data: fs.readFileSync(path.join('uploads/' + req.file.filename)),
           contentType: 'image/png'
-      }
+      }*/
     })/*
     user.save((err, result) => {
         if (err){

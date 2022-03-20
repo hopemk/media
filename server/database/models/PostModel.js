@@ -4,7 +4,7 @@ const {UserSchema} = require('./UserModel')
 const PostModel = new schema({
     author: {type : UserSchema},
     title: String,
-    context: String,
+    description: String,
     image:String,
     comments: { type: Array, default: [] },
     createdAt: { type : Date, default: Date.now }

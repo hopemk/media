@@ -7,10 +7,12 @@ const UserSchema = new schema({
     password: String,
     firstName: String,
     lastName:String,
+    /*
     image:{
         data: Buffer,
         contentType: String
-    },
+    },*/
+    image:String,
     createdAt: { type : Date, default: Date.now }
 })
 const UserModel = mongoose.model('UserModel', UserSchema)

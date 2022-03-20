@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 const bodyParser = require('body-parser')
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT || 3000
 const dev = process.env.NODE_DEV !== 'production' //true false
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler() //part of next config
@@ -20,7 +20,8 @@ nextApp.prepare().then(() => {
     app.use('/api/photos', require('./routes/index')) 
     app.use('/api/user', require('./routes/user')) 
     app.use('/api/post', require('./routes/post')) 
-    app.use('/login', require('./routes/auth')) 
+    app.use('/login', require('./routes/auth'))
+    app.use('/api/downloadimage', require('./routes/file'))  
     app.get('*', (req,res) => {
         return handle(req,res) // for all the react stuff
     })

@@ -2,7 +2,11 @@ const express = require('express')
 const router = express.Router()
 const Post = require('../database/models/PostModel')
 const {getUserById, getUserByEmail} = require('../database/service/userService')
-const { hashPassword } = require('../auth/utils')
+const upload = require('../media/upload')
+var fs = require('fs');
+var path = require('path');
+const jwt = require('jsonwebtoken');
+const {verifyToken} = require('../auth/utils')
 //const {getUserbyId, getUserByEmail} = require('../database/service/userService')
 //const {} to } = require('await-to-js')
 router.get('/', (req, res) => {
@@ -10,12 +14,14 @@ router.get('/', (req, res) => {
         res.json(posts)
     })
 })
-router.post('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
     
-    const {userId, title, description, image} = req.body;
-    console.log(userId)
+    const { title, description} = req.body;
+    const decodedToken = verifyToken(req)
+    const userId = decodedToken.user._id
     let author = await getUserById(userId);
     console.log(author)
+    const image = req.file.filename
     let post = new Post({
         author,
         title,
@@ -90,10 +96,11 @@ router
             })
             });
     })
-    .put('/:id', async (req, res) =>{
+    .put('/:id', upload.single('image'), async (req, res) =>{
         ///let post = {...req.body}
         const _id = req.params.id
-        const {userId, title, description, image} = req.body;
+        const {userId, title, description} = req.body;
+        const image = req.file.filename;
         let author = await getUserById(userId);
         Post.findOneAndUpdate({ _id }, 
             {author,
