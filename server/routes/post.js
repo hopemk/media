@@ -135,4 +135,28 @@ router
         */
         //res.json("done")
     })
+    .delete('/:id',async(req, res) => {
+      const _id = req.params.id
+      Post.deleteOne({_id}).then(result => {
+        res
+        .status(200)
+        /*.cookie('jwt', token, {
+          httpOnly: true
+        })*/
+        .json({
+          success: true,
+          data: result
+        })
+        }).catch(err => {
+            return res
+        .status(500)
+        /*.cookie('jwt', token, {
+          httpOnly: true
+        })*/
+        .json({
+          success: false,
+          data: err
+        })
+        });
+    })
 module.exports = router;

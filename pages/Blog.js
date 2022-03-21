@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -12,12 +14,20 @@ import FeaturedPost from './FeaturedPost';
 import Main from './Main';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-const post1 = './blog-post.1.md';
+const post1 = {
+  _id: "6235a5c0aa625ca7d01f0823",
+  author: null,
+  title: "undefined",
+  image: "image-1647683008500",
+  comments: [ ],
+  createdAt: "2022-03-19T09:43:28.522Z",
+  __v: 0
+  };
 const post2 = './blog-post.2.md';
 const post3 = './blog-post.3.md';
 
 const sections = [
-  { title: 'Technology', url: '#' },
+ /* { title: 'Technology', url: '#' },
   { title: 'Design', url: '#' },
   { title: 'Culture', url: '#' },
   { title: 'Business', url: '#' },
@@ -26,7 +36,7 @@ const sections = [
   { title: 'Science', url: '#' },
   { title: 'Health', url: '#' },
   { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
+  { title: 'Travel', url: '#' },*/
 ];
 
 const mainFeaturedPost = {
@@ -58,7 +68,6 @@ const featuredPosts = [
 ];
 
 const posts = [post1, post2, post3];
-
 const sidebar = {
   title: 'About',
   description:
@@ -86,6 +95,20 @@ const sidebar = {
 const theme = createTheme();
 
 export default function Blog() {
+  const [posts, setPosts] = useState([])
+    const getPosts = () => {
+        axios.get(`api/post`)
+            .then(res => {
+                const data = res.data
+                setPosts( data );
+            })
+        console.log(posts)
+    }
+    useEffect(() => {
+        getPosts();
+        //let timer1 = setTimeout(() => setShow(true), delay * 1000);
+    })
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -94,19 +117,11 @@ export default function Blog() {
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
           <Grid container spacing={4}>
-            {featuredPosts.map((post) => (
-              <FeaturedPost key={post.title} post={post} />
+            {posts.map((post) => (
+              <FeaturedPost key={post.createdAt} post={post} />
             ))}
           </Grid>
-          <Grid container spacing={5} sx={{ mt: 3 }}>
-            <Main title="From the firehose" posts={posts} />
-            <Sidebar
-              title={sidebar.title}
-              description={sidebar.description}
-              archives={sidebar.archives}
-              social={sidebar.social}
-            />
-          </Grid>
+          
         </main>
       </Container>
       <Footer

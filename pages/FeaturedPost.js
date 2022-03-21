@@ -15,11 +15,14 @@ function FeaturedPost(props) {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
+          <Typography component="h2" variant="h5">
+             By {post.firstName} {post.lastName}
+            </Typography>
             <Typography component="h2" variant="h5">
               {post.title}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {post.date}
+              {post.createdAt}
             </Typography>
             <Typography variant="subtitle1" paragraph>
               {post.description}
@@ -31,7 +34,7 @@ function FeaturedPost(props) {
           <CardMedia
             component="img"
             sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={post.image}
+            image={'http://localhost:3000/api/downloadimage/' + post.image}
             alt={post.imageLabel}
           />
         </Card>
