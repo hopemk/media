@@ -8,9 +8,33 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 function Header(props) {
-  const { sections, title } = props;
-
+  const { sections, title, user } = props;
+  const LoggedIn = (arg) => {
+      if(arg){
+        return (
+          <>
+          <Link href="/newpost" variant="body2">
+                  {"New Post"}
+                </Link>
+          <Button variant="outlined" size="small">
+          {user.email}
+        </Button>
+        <Button variant="outlined" size="small">
+        Logout
+      </Button>
+      </>
+        )
+      }
+      else{
+        return(
+          <Button variant="outlined" size="small">
+          Sign In
+        </Button>
+        )
+      }
+  }
   return (
+    
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Button size="small">Subscribe</Button>
@@ -27,9 +51,7 @@ function Header(props) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
+        <LoggedIn arg={user.email}/>
       </Toolbar>
       <Toolbar
         component="nav"

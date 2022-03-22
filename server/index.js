@@ -7,8 +7,8 @@ const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler() //part of next config
 const mongoose = require('mongoose')
 require('./auth/auth');
-const connectToDatabase = require('./database/connection.js')
-const db = mongoose.connect('mongodb://localhost/MyDatabase1')
+//const connectToDatabase = require('./database/connection.js')
+const db = mongoose.connect('mongodb+srv://media_app:secure123.@cluster0.2f43e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 
 
 
@@ -20,9 +20,12 @@ nextApp.prepare().then(() => {
     app.use('/api/photos', require('./routes/index')) 
     app.use('/api/user', require('./routes/user')) 
     app.use('/api/post', require('./routes/post')) 
-    app.use('/login', require('./routes/auth'))
+    app.use('/api/login', require('./routes/auth'))
     app.use('/api/downloadimage', require('./routes/file'))  
     app.get('*', (req,res) => {
+        return handle(req,res) // for all the react stuff
+    })
+    app.get('/EditPost/:id', (req,res) => {
         return handle(req,res) // for all the react stuff
     })
     //let conn = await connectToDatabase();

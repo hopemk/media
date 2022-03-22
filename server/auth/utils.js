@@ -22,7 +22,9 @@ const { UserModel } = require ('../database/models/UserModel')
     })
   }
   const verifyToken = (req) => {
-    const token = req.headers.cookie.split(' ')[2].split('=')[1];
+    //console.log(req.headers.cookie.split(' ')[2])
+    const token = req.headers.cookie.split(' ')[1].split('=')[1];
+    
     return jwt.verify(token, 'TOP_SECRET');
   }
   const hashPassword = async password => {

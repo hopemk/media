@@ -9,34 +9,24 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import MainFeaturedPost from './MainFeaturedPost';
 import FeaturedPost from './FeaturedPost';
 import Main from './Main';
-import Sidebar from './Sidebar';
+//import Sidebar from './Sidebar';
 import Footer from './Footer';
-const post1 = {
-  _id: "6235a5c0aa625ca7d01f0823",
-  author: null,
-  title: "undefined",
-  image: "image-1647683008500",
-  comments: [ ],
-  createdAt: "2022-03-19T09:43:28.522Z",
-  __v: 0
-  };
-const post2 = './blog-post.2.md';
-const post3 = './blog-post.3.md';
-
 const sections = [
- /* { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },*/
+  /* { title: 'Technology', url: '#' },
+   { title: 'Design', url: '#' },
+   { title: 'Culture', url: '#' },
+   { title: 'Business', url: '#' },
+   { title: 'Politics', url: '#' },
+   { title: 'Opinion', url: '#' },
+   { title: 'Science', url: '#' },
+   { title: 'Health', url: '#' },
+   { title: 'Style', url: '#' },
+   { title: 'Travel', url: '#' },*/
 ];
 
 const mainFeaturedPost = {
@@ -47,7 +37,7 @@ const mainFeaturedPost = {
   imageText: 'main image description',
   linkText: 'Continue reading…',
 };
-
+const steps = ['Shipping address', 'Payment details', 'Review your order'];
 const featuredPosts = [
   {
     title: 'Featured post',
@@ -67,7 +57,6 @@ const featuredPosts = [
   },
 ];
 
-const posts = [post1, post2, post3];
 const sidebar = {
   title: 'About',
   description:
@@ -96,33 +85,60 @@ const theme = createTheme();
 
 export default function Blog() {
   const [posts, setPosts] = useState([])
-    const getPosts = () => {
-        axios.get(`api/post`)
-            .then(res => {
-                const data = res.data
-                setPosts( data );
-            })
-        console.log(posts)
+  const [user, setUser] = useState({})
+  
+  const getPosts = async () => {
+    await axios.get(`api/post`)
+      .then(res => {
+        const data = res.data
+        setPosts(data);
+      })
+    console.log(posts)
+  }
+  const getUser = async () => {
+    await axios.get(`api/login`)
+      .then(res => {
+        const data = res.data
+        setUser(data.data.user);
+      })
+    console.log(user)
+  }
+  const logout = () => {
+    document.cookie = null
+    return 'logged out'
+  }
+  useEffect(() => {
+    if (document.cookie) {
+      if (!user.email) {
+        getUser()
+      }
     }
-    useEffect(() => {
-        getPosts();
-        //let timer1 = setTimeout(() => setShow(true), delay * 1000);
-    })
+    getPosts();
+    //let timer1 = setTimeout(() => setShow(true), delay * 1000);
+    /*
+    let interval = setInterval(() => {
+      getUser()
+      getPosts()
+      
+    }, 600000);
+    return clearInterval(interval)*/
+  })
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} />
+        <Header title="Blog" sections={sections} user={user} />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
           <Grid container spacing={4}>
             {posts.map((post) => (
-              <FeaturedPost key={post.createdAt} post={post} />
+              <FeaturedPost key={post.createdAt} post={post} user={user} />
             ))}
           </Grid>
-          
+
         </main>
+        
       </Container>
       <Footer
         title="Footer"
