@@ -26,7 +26,7 @@ nextApp.prepare().then(() => {
     app.get('/newpost', passport.authenticate('jwt', { session: false,failureRedirect: '/login' }), (req,res) => {
         return handle(req,res) // for all the react stuff
     }) 
-    app.get('/allposts', passport.authenticate('jwt', { session: false}), (req,res) => {
+    app.get('/allposts', passport.authenticate('jwt', { session: false,failureRedirect: '/login'}), (req,res) => {
         return handle(req,res) // for all the react stuff
     }) 
     app.get('*', (req,res) => {

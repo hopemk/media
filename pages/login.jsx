@@ -39,7 +39,7 @@ export default function SignIn() {
           email,
           password
         }).then(res => {
-            console.log(res)
+          window.location.replace('/allposts')
         }).catch(err => {
             console.log(err)
         })

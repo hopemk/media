@@ -17,7 +17,9 @@ function FeaturedPost(props) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return (<Card sx={{ display: 'flex' }}>
+        return (
+          <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
         <CardContent sx={{ flex: 1 }}>
           <Typography component="h2" variant="h5">
             By {post.author.firstName} {post.author.lastName}
@@ -43,7 +45,8 @@ function FeaturedPost(props) {
           alt={post.imageLabel}
         />
         
-      </Card>);
+      </Card>
+      </CardActionArea>);
       case 1:
         return <UpdatePost post={post}/>;
       default:
@@ -77,7 +80,7 @@ function FeaturedPost(props) {
     )}
     <Button
     variant="contained"
-    onClick={deletePost(post._id)}
+    onClick={() => deletePost(post._id)}
     sx={{ mt: 3, ml: 1 }}> Delete Post</Button>
     <Button
       variant="contained"
@@ -90,10 +93,10 @@ function FeaturedPost(props) {
   }
   return (
     <Grid item xs={12} md={12}>
-      <CardActionArea component="a" href="#">
+      
       {getStepContent(activeStep)}
         
-      </CardActionArea>
+      
     </Grid>
   );
 }

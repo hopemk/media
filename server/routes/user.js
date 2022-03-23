@@ -56,6 +56,8 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     })*/
     user.save().then(result => {
+      const {email, firstName, lastName, image} = result;
+      
     res
     .status(200)
     /*.cookie('jwt', token, {
@@ -63,7 +65,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     })*/
     .json({
       success: true,
-      data: result
+      data: {email, firstName, lastName, image}
     })
     }).catch(err => {
      res

@@ -52,7 +52,7 @@ export default function SignUp() {
           fd
         ).then(res=>{
           console.log(res)
-          window.location.replace('/login')
+          //window.location.replace('/login')
         }).catch(err => {
           console.log(err)
         })

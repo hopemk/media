@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,8 +14,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const theme = createTheme();
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function UpdatePost(props) {
   const {post} = props;
@@ -26,6 +32,25 @@ export default function UpdatePost(props) {
         image:''
       })
       const [submitting, setSubmitting] = React.useState(false)
+      const [show, setShow] = React.useState({
+        message: '',
+        open: false,
+        severity: '',
+        color:''
+      });
+      const [user, setUser] = useState({})
+      
+      
+      const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setShow({
+          open: false
+            
+        });
+      };
         const handleSubmit = async e => {
             e.preventDefault()
             console.log(formData)
@@ -34,12 +59,19 @@ export default function UpdatePost(props) {
             fd.append('_id', post._id);
             fd.append('title', title);
             fd.append('description', description);
+            fd.append('userId', post.author._id)
             //fd.append('email', email);
             //fd.append('password', password);
             fd.append('image', image, image.name)
             const response = await axios.put('/api/post/' + post._id, 
               fd
             ).then(res=>{
+              setShow({
+                open: true,
+                message: 'Post updated successfully.',
+                severity: 'success',
+                color: 'green'
+              })
               console.log(res)
               //window.location.replace('/login')
             }).catch(err => {
@@ -58,6 +90,13 @@ export default function UpdatePost(props) {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <Snackbar open={show.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+
+          <Alert onClose={handleClose} severity={show.severity} color={show.severity} style={{ backgroundColor: show.color, color: 'white' }} sx={{ width: '100%' }}>
+            {show.message}
+          </Alert>
+
+        </Snackbar>
         <Box
           sx={{
             marginTop: 8,
@@ -126,7 +165,7 @@ export default function UpdatePost(props) {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/Blog" variant="body2">
+                <Link href="/allposts" variant="body2">
                   Refresh Posts
                 </Link>
               </Grid>

@@ -9,11 +9,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import MainFeaturedPost from './MainFeaturedPost';
 import FeaturedPost from './FeaturedPost';
-import Main from './Main';
 //import Sidebar from './Sidebar';
 import Footer from './Footer';
 const sections = [
@@ -128,9 +124,9 @@ export default function Blog() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="Blog" sections={sections} user={user} />
+        <Header title="Media" sections={sections} user={user} />
         <main>
-          <MainFeaturedPost post={mainFeaturedPost} />
+          
           <Grid container spacing={4}>
             {posts.map((post) => (
               <FeaturedPost key={post.createdAt} post={post} user={user} />

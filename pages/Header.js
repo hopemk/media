@@ -10,46 +10,45 @@ import { withCookies, Cookies } from 'react-cookie';
 import axios from 'axios';
 function Header(props) {
   const { sections, title, user } = props;
-  const logout = async () =>{
-    console.log("...............")
+  const logout = async () => {
     const response = await axios.get('/api/logout/'
-             
-            ).then(res=>{
-              console.log(res)
-              //window.location.replace('/login')
-            }).catch(err => {
-              console.log(err)
-            })
+
+    ).then(res => {
+      console.log(res)
+      window.location.replace('/login')
+    }).catch(err => {
+      console.log(err)
+    })
   }
   const LoggedIn = (arg) => {
-      if(arg){
-        return (
-          <>
-          <Link href="/newpost" variant="body2">
-                  {"New Post"}
-                </Link>
+    if (arg) {
+      return (
+        <>
+
           <Button variant="outlined" size="small">
-          {user.email}
-        </Button>
-        <Button variant="outlined" size="small" onClick={logout}>
-        Logout
-      </Button>
-      </>
-        )
-      }
-      else{
-        return(
-          <Button variant="outlined" size="small">
+            {user.email}
+          </Button>
+          <Button variant="outlined" size="small" onClick={logout}>
+            Logout
+          </Button>
+        </>
+      )
+    }
+    else {
+      return (
+        <Button variant="outlined" size="small">
           Sign In
         </Button>
-        )
-      }
+      )
+    }
   }
   return (
-    
+
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Button size="small">Subscribe</Button>
+        <Link href="/newpost" variant="outlined">
+          {"New Post"}
+        </Link>
         <Typography
           component="h2"
           variant="h5"
@@ -60,10 +59,8 @@ function Header(props) {
         >
           {title}
         </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <LoggedIn arg={user.email}/>
+
+        <LoggedIn arg={user.email} />
       </Toolbar>
       <Toolbar
         component="nav"

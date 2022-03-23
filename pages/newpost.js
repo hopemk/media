@@ -177,7 +177,7 @@ const Register = () => {
 
 export default Register
 */
-import * as React from 'react';
+import React, { useState, useEffect } from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -195,6 +195,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Header from './Header';
 
 
 const theme = createTheme();
@@ -202,7 +203,19 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+const sections = [];
 export default function UpdatePost(props) {
   const { post } = props;
   const [formData, setFormData] = React.useState({
@@ -214,16 +227,29 @@ export default function UpdatePost(props) {
   const [submitting, setSubmitting] = React.useState(false)
   const [show, setShow] = React.useState({
     message: '',
-    open: '',
+    open: false,
     severity: '',
     color:''
   });
+  const [user, setUser] = useState({})
+  
+  const getUser = async () => {
+    await axios.get(`api/login`)
+      .then(res => {
+        const data = res.data
+        setUser(data.data.user);
+      })
+    console.log(user)
+  }
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    setShow({
+      open: false
+        
+    });
   };
 
   const handleSubmit = async e => {
@@ -240,7 +266,7 @@ export default function UpdatePost(props) {
     const response = await axios.post('/api/post/',
       fd
     ).then(res => {
-      setshow({
+      setShow({
         open: true,
         message: 'Post saved successfully.',
         severity: 'success',
@@ -249,7 +275,12 @@ export default function UpdatePost(props) {
       console.log(res)
       //window.location.replace('/login')
     }).catch(err => {
-      console.log(err)
+      setShow({
+        open: true,
+        message: 'Error occured.',
+        severity: 'danger',
+        color: 'red'
+      })
     })
     /*
     if (success) {
@@ -263,10 +294,11 @@ export default function UpdatePost(props) {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+      
         <Snackbar open={show.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
 
           <Alert onClose={handleClose} severity={show.severity} color={show.severity} style={{ backgroundColor: show.color, color: 'white' }} sx={{ width: '100%' }}>
-            This is a success message!
+            {show.message}
           </Alert>
 
         </Snackbar>
@@ -335,18 +367,18 @@ export default function UpdatePost(props) {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Update Post
+              Save Post
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/Blog" variant="body2">
-                  Refresh Posts
+                <Link href="/allposts" variant="body2">
+                  All Posts
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
