@@ -18,11 +18,11 @@ passport.use(
         }
     },
     async (token, done) => {
-      console.log('running');
+      //console.log('running');
       try {
         return done(null, token.user);
       } catch (error) {
-        console.log(error)
+        //console.log(error)
         done(error);
       }
     }
