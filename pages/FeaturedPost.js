@@ -9,6 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import UpdatePost from './EditPost'
+import axios from 'axios';
 function FeaturedPost(props) {
   const { post, user } = props;
   const [activeStep, setActiveStep] = React.useState(0);
@@ -49,7 +50,16 @@ function FeaturedPost(props) {
         throw new Error('Unknown step');
     }
   }
-  
+  const deletePost = async (id) => {
+    const response = await axios.delete('/api/post/' + id 
+             
+            ).then(res=>{
+              console.log(res)
+              //window.location.replace('/login')
+            }).catch(err => {
+              console.log(err)
+            })
+  }
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -65,7 +75,10 @@ function FeaturedPost(props) {
         Back
       </Button>
     )}
-
+    <Button
+    variant="contained"
+    onClick={deletePost(post._id)}
+    sx={{ mt: 3, ml: 1 }}> Delete Post</Button>
     <Button
       variant="contained"
       onClick={handleNext}

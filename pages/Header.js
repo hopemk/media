@@ -6,9 +6,21 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-
+import { withCookies, Cookies } from 'react-cookie';
+import axios from 'axios';
 function Header(props) {
   const { sections, title, user } = props;
+  const logout = async () =>{
+    console.log("...............")
+    const response = await axios.get('/api/logout/'
+             
+            ).then(res=>{
+              console.log(res)
+              //window.location.replace('/login')
+            }).catch(err => {
+              console.log(err)
+            })
+  }
   const LoggedIn = (arg) => {
       if(arg){
         return (
@@ -19,7 +31,7 @@ function Header(props) {
           <Button variant="outlined" size="small">
           {user.email}
         </Button>
-        <Button variant="outlined" size="small">
+        <Button variant="outlined" size="small" onClick={logout}>
         Logout
       </Button>
       </>

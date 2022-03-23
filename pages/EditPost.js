@@ -94,6 +94,8 @@ export default function UpdatePost(props) {
                   id="description"
                   label="description"
                   name="description"
+                  multiline
+                  rows={10}
                   autoComplete="description"
                   defaultValue={post.description}
                   onChange={e => setFormData({ ...formData, description: e.target.value })}

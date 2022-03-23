@@ -7,9 +7,15 @@ import TextField from '@material-ui/core/TextField'
 //import TextArea from '@material-ui/core/TextArea'
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button'
-
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import  SnackbarContent  from '@mui/material/SnackbarContent'
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -50,6 +56,15 @@ const Register = () => {
     image:''
   })
   const [submitting, setSubmitting] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
     const handleSubmit = async e => {
         e.preventDefault()
         console.log(formData)
@@ -63,9 +78,11 @@ const Register = () => {
         const response = await axios.post('/api/post', 
           fd
         ).then(res=>{
+          NotificationManager.success(res.data, 'Title here');
           console.log(res)
           //window.location.replace('/login')
         }).catch(err => {
+          setOpen(true);
           console.log(err)
         })
         /*
@@ -79,6 +96,13 @@ const Register = () => {
   return (
     <main className={classes.layout}>
       <Paper className={classes.paper} elevation={2}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal:'right' }}>
+        
+        <Alert onClose={handleClose} severity="warning" color="warning" style={{backgroundColor:'red',color: 'white'}} sx={{ width: '100%' }}>
+          This is a success message!
+        </Alert>
+       
+      </Snackbar>
         <Box
           display="flex"
           alignItems="center"
@@ -89,7 +113,9 @@ const Register = () => {
             Register
           </Typography>
         </Box>
+
         <form method="post" className={classes.form} noValidate onSubmit={handleSubmit}>
+        <NotificationContainer/>
           <TextField
             margin="none"
             required
@@ -109,6 +135,8 @@ const Register = () => {
             id="description"
             label="description"
             name="description"
+            multiline
+            rows={10}
             autoComplete="description"
             defaultValue={formData.description}
             onChange={e => setFormData({ ...formData, description: e.target.value })}

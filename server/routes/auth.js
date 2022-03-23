@@ -10,15 +10,25 @@ const { hashPassword, verifyToken } = require('../auth/utils')
 // ...
 
 // ...
-router.get('/', async (req, res) => {
+router.get('/login', async (req, res) => {
   const decodedToken = verifyToken(req)
     //const userId = decodedToken.user._id
     //let author = await getUserById(userId);
     return res.status(200).json({success: true,data: decodedToken}) 
 })
+router.get('/logout', async (req, res) => {
+  res.cookie('jwt', 'none', {
+    expires: new Date(Date.now() + 5 * 1000),
+    httpOnly: true,
+})
+res
+    .status(200)
+    .json({ success: true, message: 'User logged out successfully' })
+}
+)
 
 router.post(
-  '/',
+  '/login',
   async (req, res, next) => {
     passport.authenticate(
       'login',
