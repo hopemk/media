@@ -52,16 +52,11 @@ export default function SignUp() {
           fd
         ).then(res=>{
           console.log(res)
-          //window.location.replace('/login')
+          
         }).catch(err => {
           console.log(err)
         })
-        /*
-        if (success) {
-          window.location.replace(data)
-          return
-        }
-        */
+        
       }
 
 
@@ -139,7 +134,7 @@ export default function SignUp() {
                   label="Profile Photo"
                   name="image"
                   type="file"
-                  //autoComplete="image"
+                  
                   onChange={e => setFormData({ ...formData, image: e.target.files[0] })}
                 />
               </Grid>

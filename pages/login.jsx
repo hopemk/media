@@ -43,12 +43,6 @@ export default function SignIn() {
         }).catch(err => {
             console.log(err)
         })
-        /*
-        if (success) {
-          window.location.replace(data)
-          return
-        }
-        */
       }
   return (
     <ThemeProvider theme={theme}>

@@ -6,14 +6,13 @@ const { hashPassword } = require('../auth/utils')
 const upload = require('../media/upload')
 var fs = require('fs');
 var path = require('path');
-//const {} to } = require('await-to-js')
 router.get('/', (req, res) => {
     UserModel.find({}, (err, users) => {
         res.json(users)
     })
 })
 router.post('/', upload.single('image'), async (req, res) => {
-    //let body;
+    
     const {email, firstName, lastName, password} = req.body;
     console.log(req.file.filename)
     if (!/\b\w+\@\w+\.\w+(?:\.\w+)?\b/.test(email)) {
@@ -24,7 +23,6 @@ router.post('/', upload.single('image'), async (req, res) => {
           data: 'Password must be between 5 and 20 characters.'
         })
       }
-    
     
       let emailTaken = await getUserByEmail(email)
    
@@ -41,42 +39,21 @@ router.post('/', upload.single('image'), async (req, res) => {
         lastName,
         password :await hashPassword(password),
         image:req.file.filename
-        /*image:{
-          data: fs.readFileSync(path.join('uploads/' + req.file.filename)),
-          contentType: 'image/png'
-      }*/
-    })/*
-    user.save((err, result) => {
-        if (err){
-            return res.status(500).json({ success: false, data: err })
-        }
-        else{
-          console.log(result)
-        }
-
-    })*/
+    })
     user.save().then(result => {
       const {email, firstName, lastName, image} = result;
-      
-    res
-    .status(200)
-    /*.cookie('jwt', token, {
-      httpOnly: true
-    })*/
-    .json({
-      success: true,
-      data: {email, firstName, lastName, image}
+      res
+        .status(200).json({
+          success: true,
+          data: {email, firstName, lastName, image}
+        })
     })
-    }).catch(err => {
+    .catch(err => {
      res
-    .status(500)
-    /*.cookie('jwt', token, {
-      httpOnly: true
-    })*/
-    .json({
-      success: false,
-      data: err
-    })
+      .status(500).json({
+        success: false,
+        data: err
+      })
     })
     
 })
