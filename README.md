@@ -1,6 +1,6 @@
 tools used
 
-next.js, react, node.js, jwt
+next.js, react, node.js, jwt, express, passport.js
 
 how to run
 1. run npm install
